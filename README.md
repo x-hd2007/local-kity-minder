@@ -9,8 +9,6 @@
 部署步骤:
 下载项目，放入tomcat或者任意自己熟悉的容器重，启动即可
 
-![image](https://github.com/wythe0102/local-kity-minder/blob/master/doc/%E4%B8%BB%E7%95%8C%E9%9D%A2.png)
-
 ## 原项目地址
 
 https://github.com/wythe0102/local-kity-minder
@@ -20,4 +18,8 @@ https://github.com/wythe0102/local-kity-minder
 ### 2023-03-27 12:31:49
 * 1、增加了 font-awesome， 功能入口使用按钮实现
 * 2、修改调整了下 JS 实现。
+
+### 界面效果
+
+![image](https://github.com/x-hd2007/local-kity-minder/blob/main/doc/kityminder.png)
 

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>思维导图 - Powered By FEX</title>
+
+	<link href="favicon.ico" type="image/x-icon" rel="shortcut icon">
+
+	<!-- bower:css -->
+	<link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap.css" />
+	<link rel="stylesheet" href="./bower_components/codemirror/lib/codemirror.css" />
+	<link rel="stylesheet" href="./bower_components/hotbox/hotbox.css" />
+	<link rel="stylesheet" href="./bower_components/kityminder-core/dist/kityminder.core.css" />
+	<link rel="stylesheet" href="./bower_components/color-picker/dist/color-picker.min.css" />
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="./bower_components/font-awesome/css/font-awesome.min.css">
+	<!-- endbower -->
+
+	<link rel="stylesheet" href="kityminder.editor.min.css">
+
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			overflow: hidden;
+		}
+		h1.editor-title {
+			background: #393F4F;
+			color: white;
+			margin: 0;
+			height: 50px;
+			font-size: 14px;
+			line-height: 40px;
+			font-family: 'Hiragino Sans GB', 'Arial', 'Microsoft Yahei';
+			font-weight: normal;
+			padding: 0 20px;
+		}
+		div.minder-editor-container {
+			position: absolute;
+			top: 50px;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+		.box-tools {
+ 			position:absolute;
+ 			right:10px;
+ 			top:5px
+		}
+		.btn {
+			border-radius:3px;
+			-webkit-box-shadow:none;
+			box-shadow:none;
+			border:1px solid transparent
+		}
+		.btn-default {
+			background-color:#f4f4f4;
+			color:#444;
+			border-color:#ddd
+		}
+		.btn-sm {
+			padding: 5px 10px;
+			font-size: 12px;
+			line-height: 1.5;
+		}
+		.btn.btn-file>input[type='file'] {
+			position:absolute;
+			top:0;
+			right:0;
+			min-width:100%;
+			min-height:100%;
+			font-size:100px;
+			text-align:right;
+			opacity:0;
+			filter:alpha(opacity=0);
+			outline:none;
+			background:white;
+			cursor:inherit;
+			display:block
+		}
+		.btn.btn-file {
+			position:relative;
+			overflow:hidden
+		}
+	</style>
+</head>
+<body ng-app="kityminder" ng-controller="MainController">
+<h1 class="editor-title">
+	<a href="https://github.com/fex-team/kityminder-editor" style="color: #fff;" target="_blank">
+		思维导图 - Powered By FEX
+	</a>
+	<div class="box-tools pull-right">
+		<button type="button" class="btn btn-default btn-sm" data-type="json" title="导出JSON">
+			<i class="fa fa-file-code-o"></i>&nbsp;&nbsp;导出JSON
+		</button>
+		<button type="button" class="btn btn-default btn-sm" data-type="md" title="导出Markdown">
+				<i class="fa fa-bookmark-o"></i>&nbsp;&nbsp;导出Markdown
+		</button>
+		<button type="button" class="btn btn-default btn-sm" data-type="svg" title="导出SVG">
+				<i class="fa fa-file-image-o"></i>&nbsp;&nbsp;导出SVG
+		</button>
+		<button type="button" class="btn btn-default btn-sm" data-type="km" title="导出KM">
+				<i class="fa fa-code"></i>&nbsp;&nbsp;导出KM
+		</button>
+		<button type="button" class="btn btn-default btn-sm" data-type="png" title="导出PNG">
+				<i class="fa fa-picture-o"></i>&nbsp;&nbsp;导出PNG
+		</button>
+		<div class="btn btn-default btn-file">
+				<i class="fa fa-sign-in"></i>&nbsp;&nbsp;导入
+				<input type="file" id="fileInput" name="fileInput">
+		</div>
+		
+		<a href="#" id="downloadlink" name="downloadlink" style="display:none">下载实现</a>
+	</div>
+	
+</h1>
+<kityminder-editor on-init="initEditor(editor, minder)" data-theme="fresh-green"></kityminder-editor>
+<iframe name="frameFile" style="display:none;"></iframe>
+</body>
+
+<!-- bower:js -->
+<script src="./bower_components/jquery/dist/jquery.js"></script>
+<script src="./bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="./bower_components/angular/angular.js"></script>
+<script src="./bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="./bower_components/codemirror/lib/codemirror.js"></script>
+<script src="./bower_components/codemirror/mode/xml/xml.js"></script>
+<script src="./bower_components/codemirror/mode/javascript/javascript.js"></script>
+<script src="./bower_components/codemirror/mode/css/css.js"></script>
+<script src="./bower_components/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script src="./bower_components/codemirror/mode/markdown/markdown.js"></script>
+<script src="./bower_components/codemirror/addon/mode/overlay.js"></script>
+<script src="./bower_components/codemirror/mode/gfm/gfm.js"></script>
+<script src="./bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
+<script src="./bower_components/marked/lib/marked.js"></script>
+<script src="./bower_components/kity/dist/kity.min.js"></script>
+<script src="./bower_components/hotbox/hotbox.js"></script>
+<script src="./bower_components/json-diff/json-diff.js"></script>
+<script src="./bower_components/kityminder-core/dist/kityminder.core.min.js"></script>
+<script src="./bower_components/color-picker/dist/color-picker.min.js"></script>
+<!-- endbower -->
+
+<script src="kityminder.editor.min.js"></script>
+
+<script src="mydiy.js"></script>
+
+<script>
+	angular.module('kityminder', ['kityminderEditor'])
+	.controller('MainController', function($scope) {
+		$scope.initEditor = function(editor, minder) {
+			window.editor = editor;
+			window.minder = minder;
+		};
+	});
+</script>
+</html>
